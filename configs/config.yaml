@@ -1,0 +1,15 @@
+data:
+  path: "../data/creditcard.csv"
+  test_size: 0.2
+  validate_size: 0.25
+  normal_frac: 0.5
+
+model:
+  type: "LogisticRegression"
+  random_state: 2020
+  max_iter: 400
+  solver: "newton-cg"
+
+paths:
+  roc_plot: "sklearn_roc_plot.png"
+  conf_matrix: "sklearn_conf_matrix.png"
