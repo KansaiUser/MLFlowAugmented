@@ -22,3 +22,15 @@ poetry run python practice1.py
 ```
 
 This script does not have any MLFlow function used
+
+You can also run 
+
+```Shell
+ poetry run python practice1.py data.normal_frac=0.1
+```
+
+or for multiple runs
+
+```Shell
+poetry run python practice1.py -m data.normal_frac=0.1,0.2
+```
