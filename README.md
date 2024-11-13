@@ -14,14 +14,19 @@ poetry install --no-root
 
 ## Run
 
-Change folders and run the script
+Change folders and in one terminal run
 
 ```Shell
 cd src
-poetry run python practice1.py
+poetry run mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns --host 0.0.0.0 --port 5000
 ```
 
-This script does not have any MLFlow function used
+and in another terminal run the script
+
+```Shell
+cd src
+poetry run python practiceMLFlow1.py
+```
 
 You can also run 
 
@@ -34,3 +39,6 @@ or for multiple runs
 ```Shell
 poetry run python practice1.py -m data.normal_frac=0.1,0.2
 ```
+
+
+Here by going to http://localhost:5000/ you will see the MLOps UI and can see the runs on the experiment `scikit_learn_experiment`
