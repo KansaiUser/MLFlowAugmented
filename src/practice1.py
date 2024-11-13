@@ -21,6 +21,9 @@ def main(cfg: DictConfig):
     normal = df[df.Class == 0].sample(frac=cfg.data.normal_frac, random_state=cfg.model.random_state).reset_index(drop=True)
     anomaly = df[df.Class == 1]
 
+    print(f"Normal: {normal.shape}")
+    print(f"Anomalies: {anomaly.shape}")
+
     # Data Splitting
     normal_train, normal_test = train_test_split(normal, test_size=cfg.data.test_size, random_state=cfg.model.random_state)
     anomaly_train, anomaly_test = train_test_split(anomaly, test_size=cfg.data.test_size, random_state=cfg.model.random_state)
