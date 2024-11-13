@@ -6,6 +6,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import RocCurveDisplay, roc_auc_score, confusion_matrix
+from sklearn.metrics import precision_score, recall_score
 from loguru import logger
 import hydra
 from omegaconf import DictConfig
@@ -23,6 +24,9 @@ def main(cfg: DictConfig):
     print(f"Shape: {df.shape}")
     normal = df[df.Class == 0].sample(frac=cfg.data.normal_frac, random_state=cfg.model.random_state).reset_index(drop=True)
     anomaly = df[df.Class == 1]
+
+    print(f"Normal: {normal.shape}")
+    print(f"Anomalies: {anomaly.shape}")
 
     # Data Splitting
     normal_train, normal_test = train_test_split(normal, test_size=cfg.data.test_size, random_state=cfg.model.random_state)
@@ -81,11 +85,19 @@ def evaluate(sk_model, x_test, y_test, paths):
     preds = sk_model.predict(x_test)
     auc_score = roc_auc_score(y_test, preds)
 
+    precision = precision_score(y_test, preds)
+    recall = recall_score(y_test, preds)
+
     mlflow.log_metric("eval_acc",eval_acc)
     mlflow.log_metric("auc_score",auc_score)
+
+    mlflow.log_metric("precision",precision)
+    mlflow.log_metric("recall",recall)
     
     print(f"AUC Score: {auc_score:.3%}")
     print(f"Eval Accuracy: {eval_acc:.3%}")
+    print(f"Precision: {precision:.3%}")
+    print(f"Recall: {recall:.3%}")
     
     # ROC Curve
     RocCurveDisplay.from_estimator(sk_model, x_test, y_test, name='Scikit-learn ROC Curve')
