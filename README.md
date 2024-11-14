@@ -1,5 +1,7 @@
 # Augmented MLFLow
 
+You can read the article for this repo in [this Medium article](https://medium.com/@hitorunajp/mlflow-with-hydra-c8eb79d6bd15)
+
 ## Data
 
 Get the data from Kaggle website [here](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud?resource=download) and save it inside the `data` folder
