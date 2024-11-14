@@ -8,6 +8,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import RocCurveDisplay, roc_auc_score, confusion_matrix
 from sklearn.metrics import precision_score, recall_score
 from loguru import logger
+import os
 import hydra
 from omegaconf import DictConfig
 
@@ -98,12 +99,18 @@ def evaluate(sk_model, x_test, y_test, paths):
     print(f"Eval Accuracy: {eval_acc:.3%}")
     print(f"Precision: {precision:.3%}")
     print(f"Recall: {recall:.3%}")
+
+    output_dir = hydra.core.hydra_config.HydraConfig.get().runtime.output_dir
+    logger.info(f"Output dir {output_dir}")
     
     # ROC Curve
     RocCurveDisplay.from_estimator(sk_model, x_test, y_test, name='Scikit-learn ROC Curve')
-    plt.savefig(paths.roc_plot)
-    plt.show()
-    plt.clf()
+    roc_path = os.path.join(output_dir, paths.roc_plot)
+    plt.savefig(roc_path)
+    # plt.show()
+    # plt.clf()
+    plt.close()
+    print("ROC curve saved")
     
     # Confusion Matrix
     conf_matrix = confusion_matrix(y_test, preds)
@@ -113,10 +120,14 @@ def evaluate(sk_model, x_test, y_test, paths):
     plt.ylabel('Actual')
     plt.xlabel('Predicted')
     plt.title("Confusion Matrix")
-    plt.savefig(paths.conf_matrix)
+    conf_matrix_path = os.path.join(output_dir,paths.conf_matrix)
+    plt.savefig(conf_matrix_path)
+    plt.close() 
+    # plt.savefig(paths.conf_matrix)
+    print("Confusion matrix saved")
 
-    mlflow.log_artifact("sklearn_roc_plot.png")
-    mlflow.log_artifact("sklearn_conf_matrix.png")
+    mlflow.log_artifact(roc_path)
+    mlflow.log_artifact(conf_matrix_path)
 
 if __name__ == "__main__":
     main()
