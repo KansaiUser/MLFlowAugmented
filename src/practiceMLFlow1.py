@@ -61,6 +61,14 @@ def main(cfg: DictConfig):
     )
     mlflow.set_experiment("scikit_learn_experiment")
     with mlflow.start_run():
+        # Log parameters
+        mlflow.log_param("random_state", cfg.model.random_state)
+        mlflow.log_param("max_iter", cfg.model.max_iter)
+        mlflow.log_param("solver", cfg.model.solver)
+        mlflow.log_param("normal_frac", cfg.data.normal_frac)
+        mlflow.log_param("test_size", cfg.data.test_size)
+        mlflow.log_param("validate_size", cfg.data.validate_size)
+        
         train(sk_model, x_train, y_train)
         evaluate(sk_model, x_test, y_test, cfg.paths)
 
